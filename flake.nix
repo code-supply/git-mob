@@ -36,8 +36,10 @@
           }
         );
       in {
-        apps = {
-          default = flake-utils.lib.mkApp {drv = gitMob;};
+        apps.default = flake-utils.lib.mkApp {drv = gitMob;};
+        packages.default = gitMob;
+        devShells.default = pkgs.mkShell {
+          packages = [gitMob];
         };
       }
     );

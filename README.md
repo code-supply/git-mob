@@ -9,7 +9,25 @@ The regular git-mob implementations have the following problems for nix users:
   makes it read-only.
 - At least one of them is written for Node. NPM packages are irritating to
   write derivations for, due to the impure nature of the builds.
-- There's no nix derivation written
+- There's no nix derivation written for those implementations AFAIK.
+
+All the state in this version is kept in `~/.git-coauthors`. Its main job is to
+write to `~/.gitmessage.txt`.
+
+## Installation / usage
+
+- Enable flakes in nix.
+- Configure your git to use ~/.gitmessage.txt as its commit.template. In Home
+  Manager, this is `programs.git.extraConfig.commit.template`.
+- Install the packages into your Home Manager
+- Run `git mob ab bc` or `git solo` (they're aliases)
+
+Alternatively, run directly:
+
+nix run github:code-supply/git-mob ab bc cd
+
+It'll give you an ugly error if you don't have ~/.git-coauthors. Make that file
+by hand, because I haven't written the bits to do it yet.
 
 ## See also
 
