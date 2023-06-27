@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+dir="$(dirname $0)"
+
+coauthors="$(@jq@ \
+  --raw-output \
+  --args \
+  '.mob = $ARGS.positional' \
+  -- \
+  $@ \
+  < ~/.git-coauthors
+)"
+
+echo "$coauthors" > ~/.git-coauthors
+printed="$($dir/git-mob-print)"
+echo -e "\n\n$printed" > ~/.gitmessage.txt
+echo "$printed"

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+@jq@ \
+  --raw-output \
+  "$(cat <<'EOF'
+  .mob as $mob
+| .coauthors
+| to_entries
+| map(select([.key] | inside($mob)))
+| from_entries
+| map("Co-authored-by: \(.name) <\(.email)>")[]
+EOF
+)" \
+  < ~/.git-coauthors
