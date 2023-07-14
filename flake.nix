@@ -18,7 +18,8 @@
           stdenv.mkDerivation
           rec {
             name = "git-mob";
-            buildCommand = ''
+            src = ./.;
+            installPhase = ''
               install -Dm755 ${gitMobScript} $out/bin/git-mob
               ln -s $out/bin/git-mob $out/bin/git-solo
               install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
