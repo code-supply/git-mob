@@ -3,6 +3,8 @@
 set -e
 
 dir="$(dirname $0)"
+coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
+template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
 
 coauthors="$(@jq@ \
   --raw-output \
@@ -10,10 +12,10 @@ coauthors="$(@jq@ \
   '.mob = $ARGS.positional' \
   -- \
   $@ \
-  < ~/.git-coauthors
+  < "$coauthors_file"
 )"
 
-echo "$coauthors" > ~/.git-coauthors
+echo "$coauthors" > "$coauthors_file"
 printed="$($dir/git-mob-print)"
-echo -e "\n\n$printed" > ~/.gitmessage.txt
+echo -e "\n\n$printed" > "$template_file"
 echo "$printed"

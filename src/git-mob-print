@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
+
 @jq@ \
   --raw-output \
   "$(cat <<'EOF'
@@ -11,4 +13,4 @@
 | map("Co-authored-by: \(.name) <\(.email)>")[]
 EOF
 )" \
-  < ~/.git-coauthors
+  < "$coauthors_file"

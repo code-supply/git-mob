@@ -1,0 +1,60 @@
+set -e
+
+assert_equal () {
+  local expected=$1
+  local actual=$2
+  local message=${@:3}
+
+  if [[ "$expected" = "$actual" ]]
+  then
+    echo "✓ $message"
+  else
+    echo "✗ $message"
+    echo "∵ actual:"
+    echo "$actual"
+    echo "not equal to:"
+    echo "$expected"
+    exit 1
+  fi
+}
+
+echo '{"coauthors":' \
+  > "$GIT_MOB_COAUTHORS"
+echo '{"ab":{"name":"Andrew Bruce","email":"me@andrewbruce.net"}' \
+  >> "$GIT_MOB_COAUTHORS"
+echo ',"fb":{"name":"Fred Brookes","email":"fred@example.com"}' \
+  >> "$GIT_MOB_COAUTHORS"
+echo '}}' \
+  >> "$GIT_MOB_COAUTHORS"
+
+expected_output="$(cat <<EOF
+Co-authored-by: Andrew Bruce <me@andrewbruce.net>
+Co-authored-by: Fred Brookes <fred@example.com>
+EOF
+)"
+
+actual_output="$(git-mob ab fb)"
+
+assert_equal \
+  "$expected_output" \
+  "$actual_output" \
+  Forming a mob prints the new mob
+
+assert_equal \
+  "
+
+$expected_output" \
+  "$(cat "$GIT_MOB_TEMPLATE")" \
+  Forming a mob writes the commit template
+
+actual_output="$(git-solo)"
+
+assert_equal \
+  "" \
+  "$actual_output" \
+  Soloing shows no output
+
+assert_equal \
+  "" \
+  "$(cat "$GIT_MOB_TEMPLATE")" \
+  Soloing wipes the commit template
