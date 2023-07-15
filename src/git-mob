@@ -6,6 +6,12 @@ dir="$(dirname $0)"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
 
+if [[ -z "$1" ]]
+then
+  > "$template_file"
+  exit 0
+fi
+
 coauthors="$(@jq@ \
   --raw-output \
   --args \

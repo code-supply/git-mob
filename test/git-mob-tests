@@ -1,19 +1,24 @@
 set -e
 
 assert_equal () {
+  local red='\033[0;31m'
+  local green='\033[0;32m'
+  local no_color='\033[0m'
   local expected=$1
   local actual=$2
   local message=${@:3}
 
   if [[ "$expected" = "$actual" ]]
   then
-    echo "✓ $message"
+    printf "$green✓$no_color $message\n"
   else
-    echo "✗ $message"
+    printf "$red✗$no_color $message\n"
+    printf "$red\n"
     echo "∵ actual:"
     echo "$actual"
     echo "not equal to:"
     echo "$expected"
+    printf "$no_color"
     exit 1
   fi
 }
@@ -58,3 +63,8 @@ assert_equal \
   "" \
   "$(cat "$GIT_MOB_TEMPLATE")" \
   Soloing wipes the commit template
+
+assert_equal \
+  0 \
+  "$(du "$GIT_MOB_TEMPLATE" | cut -f1)" \
+  Soloing makes commit template zero length
