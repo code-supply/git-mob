@@ -33,17 +33,17 @@
           {
             name = "git-mob";
             src = ./.;
+            installPhase = ''
+              install -Dm755 ${gitMobScript} $out/bin/git-mob
+              ln -s $out/bin/git-mob $out/bin/git-solo
+              install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
+            '';
             doInstallCheck = true;
             installCheckPhase = ''
               export PATH="$PATH:$out/bin"
               export GIT_MOB_COAUTHORS=git-coauthors
               export GIT_MOB_TEMPLATE=gitmessage.txt
               test/git-mob-tests
-            '';
-            installPhase = ''
-              install -Dm755 ${gitMobScript} $out/bin/git-mob
-              ln -s $out/bin/git-mob $out/bin/git-solo
-              install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
             '';
           }
         );
