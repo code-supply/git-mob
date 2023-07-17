@@ -2,26 +2,27 @@
 
 set -e
 
-dir="$(dirname $0)"
+dir="$(dirname "$0")"
 coauthors_file=$1
 template_file=$2
+mob_list_file=$3
 
-coauthors="$(@jq@ \
+# shellcheck disable=SC2016
+@jq@ \
+  -c \
+  --null-input \
   --raw-output \
   --args \
-  '.mob = $ARGS.positional' \
+  '$ARGS.positional' \
   -- \
-  ${@:3} \
-  < "$coauthors_file"
-)"
+  "${@:4}" \
+  > "$mob_list_file"
 
-echo "$coauthors" > "$coauthors_file"
-
-printed="$($dir/git-mob-print "$coauthors_file")"
+printed="$("$dir/git-mob-print" "$coauthors_file" "$mob_list_file")"
 
 if [[ -z "$printed" ]]
 then
-  > "$template_file"
+  true > "$template_file"
 else
   echo -e "\n\n$printed" > "$template_file"
 fi

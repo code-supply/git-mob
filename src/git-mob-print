@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
 
+set -e
+
 coauthors_file=$1
+mob_list_file=$2
+
+[[ -e "$mob_list_file" ]] \
+  && mob_list="$(cat "$mob_list_file")"
+
+[[ -z "$mob_list" ]] \
+  && mob_list=[]
 
 @jq@ \
   --raw-output \
+  --argjson mob "$mob_list" \
   "$(cat <<'EOF'
-  .mob as $mob
-| .coauthors
+  .coauthors
 | to_entries
 | map(select([.key] | inside($mob)))
 | from_entries

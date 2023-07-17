@@ -44,6 +44,7 @@
               export PATH="$PATH:$out/bin"
               export GIT_MOB_COAUTHORS=git-coauthors
               export GIT_MOB_TEMPLATE=gitmessage.txt
+              export GIT_MOB_LIST=git-mob-list
               patchShebangs test/git-mob-tests
               test/git-mob-tests
             '';

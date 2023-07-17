@@ -2,8 +2,9 @@
 
 set -e
 
-dir="$(dirname $0)"
+dir="$(dirname "$0")"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
+mob_list_file=${GIT_MOB_LIST=~/.git-mob}
 
-"$dir/write" "$coauthors_file" "$template_file"
+"$dir/write" "$coauthors_file" "$template_file" "$mob_list_file"
