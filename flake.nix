@@ -43,6 +43,7 @@
               export PATH="$PATH:$out/bin"
               export GIT_MOB_COAUTHORS=git-coauthors
               export GIT_MOB_TEMPLATE=gitmessage.txt
+              patchShebangs test/git-mob-tests
               test/git-mob-tests
             '';
           }
