@@ -6,10 +6,4 @@ dir="$(dirname $0)"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
 
-if [[ -z "$1" ]]
-then
-  "$dir/git-mob-print" "$coauthors_file"
-  exit 0
-fi
-
-"$dir/write" "$coauthors_file" "$template_file" $@
+"$dir/write" "$coauthors_file" "$template_file"

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -e
+
+dir="$(dirname $0)"
+coauthors_file=$1
+template_file=$2
+
+coauthors="$(@jq@ \
+  --raw-output \
+  --args \
+  '.mob = $ARGS.positional' \
+  -- \
+  ${@:3} \
+  < "$coauthors_file"
+)"
+
+echo "$coauthors" > "$coauthors_file"
+
+printed="$($dir/git-mob-print "$coauthors_file")"
+
+if [[ -z "$printed" ]]
+then
+  > "$template_file"
+else
+  echo -e "\n\n$printed" > "$template_file"
+fi
+
+echo "$printed"

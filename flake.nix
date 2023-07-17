@@ -14,9 +14,9 @@
     flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
-        gitMobScript = with pkgs;
+        writeScript = with pkgs;
           substituteAll {
-            src = ./src/git-mob;
+            src = ./src/write;
             isExecutable = true;
             jq = "${jq}/bin/jq";
           };
@@ -34,8 +34,9 @@
             name = "git-mob";
             src = ./.;
             installPhase = ''
-              install -Dm755 ${gitMobScript} $out/bin/git-mob
-              ln -s $out/bin/git-mob $out/bin/git-solo
+              install -Dm755 ${./src/git-mob} $out/bin/git-mob
+              install -Dm755 ${./src/git-solo} $out/bin/git-solo
+              install -Dm755 ${writeScript} $out/bin/write
               install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
             '';
             doInstallCheck = true;

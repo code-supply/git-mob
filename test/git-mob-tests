@@ -54,6 +54,11 @@ $expected_output" \
   "$(cat "$GIT_MOB_TEMPLATE")" \
   Forming a mob writes the commit template
 
+assert_equal \
+  "$expected_output" \
+  "$(git-mob)" \
+  Running git-mob without arguments shows the current mob
+
 actual_output="$(git-solo)"
 
 assert_equal \

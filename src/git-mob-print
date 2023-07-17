@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
+coauthors_file=$1
 
 @jq@ \
   --raw-output \
