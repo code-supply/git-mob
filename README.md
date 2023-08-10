@@ -11,8 +11,14 @@ The regular git-mob implementations have the following problems for nix users:
   write derivations for, due to the impure nature of the builds.
 - There's no nix derivation written for those implementations AFAIK.
 
-All the state in this version is kept in `~/.git-coauthors`. Its main job is to
-write to `~/.gitmessage.txt`.
+By default you set your team in `~/.git-coauthors`. The tool keeps state in `~/.git-mob`.
+The tool's main job is to write to `~/.gitmessage.txt`.
+
+You can override these files using environment variables:
+
+- GIT_MOB_COAUTHORS: the JSON file where you define your team
+- GIT_MOB_LIST: the state that this tool keeps
+- GIT_MOB_TEMPLATE: the commit template that is written
 
 ## Installation / usage
 
