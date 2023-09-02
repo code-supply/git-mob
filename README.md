@@ -23,16 +23,18 @@ You can override these files using environment variables:
 ## Installation / usage
 
 - Enable flakes in nix.
-- Configure your git to use ~/.gitmessage.txt as its commit.template. In Home
+- Configure your git to use `~/.gitmessage.txt` as its commit.template. In Home
   Manager, this is `programs.git.extraConfig.commit.template`.
 - Install the packages into your Home Manager
 - Run `git mob ab bc` or `git solo` to work alone
 
 Alternatively, run directly:
 
+```
 nix run github:code-supply/git-mob ab bc cd
+```
 
-It'll give you an ugly error if you don't have ~/.git-coauthors. Make that file
+It'll give you an ugly error if you don't have `~/.git-coauthors`. Make that file
 by hand, because I haven't written the bits to do it yet.
 
 ## See also
