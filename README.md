@@ -26,7 +26,7 @@ You can override these files using environment variables:
 - Configure your git to use ~/.gitmessage.txt as its commit.template. In Home
   Manager, this is `programs.git.extraConfig.commit.template`.
 - Install the packages into your Home Manager
-- Run `git mob ab bc` or `git solo` (they're aliases)
+- Run `git mob ab bc` or `git solo` to work alone
 
 Alternatively, run directly:
 
