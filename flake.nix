@@ -6,30 +6,30 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-        writeScript = with pkgs;
-          substituteAll {
-            src = ./src/write;
-            isExecutable = true;
-            jq = "${jq}/bin/jq";
-          };
+  outputs =
+    { self
+    , nixpkgs
+    , flake-utils
+    }:
+    flake-utils.lib.eachDefaultSystem (system:
+    let
+      pkgs = nixpkgs.legacyPackages.${system};
+      writeScript = with pkgs;
+        substituteAll {
+          src = ./src/write;
+          isExecutable = true;
+          jq = "${jq}/bin/jq";
+        };
 
-        gitMobPrintScript = with pkgs;
-          substituteAll {
-            src = ./src/git-mob-print;
-            isExecutable = true;
-            jq = "${jq}/bin/jq";
-          };
+      gitMobPrintScript = with pkgs;
+        substituteAll {
+          src = ./src/git-mob-print;
+          isExecutable = true;
+          jq = "${jq}/bin/jq";
+        };
 
-        gitMob = with pkgs; (
-          stdenv.mkDerivation
+      gitMob = with pkgs; (
+        stdenv.mkDerivation
           {
             name = "git-mob";
             src = ./.;
@@ -49,16 +49,19 @@
               test/git-mob-tests
             '';
           }
-        );
-      in {
-        apps.default = flake-utils.lib.mkApp {drv = gitMob;};
-        packages.default = gitMob;
-        devShells.default = pkgs.mkShell {
-          packages = [
-            gitMob
-            pkgs.shellcheck
-          ];
-        };
-      }
+      );
+    in
+    {
+      formatter = pkgs.nixpkgs-fmt;
+      apps.default = flake-utils.lib.mkApp { drv = gitMob; };
+      packages.default = gitMob;
+      devShells.default = pkgs.mkShell {
+        packages = [
+          gitMob
+          pkgs.nixpkgs-fmt
+          pkgs.shellcheck
+        ];
+      };
+    }
     );
 }
