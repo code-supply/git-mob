@@ -34,7 +34,8 @@ echo ',"fb":{"name":"Fred Brookes","email":"fred@example.com"}' \
 echo '}}' \
   >> "$GIT_MOB_COAUTHORS"
 
-assert_equal \
-  "dialog --erase-on-exit --default-item 1 --checklist 'Mob up with:' 0 0 10 ab "Andrew Bruce" off fb "Fred Brookes" off" \
+actual_output="$(generate-dialog-args)"
+
+assert_equal "0 0 10 ab 'Andrew Bruce' off fb 'Fred Brookes' off" \
   "$actual_output" \
   Dialog command is generated

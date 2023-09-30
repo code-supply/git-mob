@@ -13,4 +13,22 @@ then
   exit 0
 fi
 
-"$dir/write" "$coauthors_file" "$template_file" "$mob_list_file" "$@"
+if [[ "$1" == "pick" ]]
+then
+  export GIT_MOB_COAUTHORS
+  cmd="$(cat <<EOF
+@dialog@ \
+--stdout \
+--erase-on-exit \
+--default-item 1 \
+--checklist \
+'Mob up with:' \
+$($dir/generate-dialog-args)
+EOF
+)"
+  short_names="$(eval "$cmd")"
+else
+  short_names="$@"
+fi
+
+"$dir/write" "$coauthors_file" "$template_file" "$mob_list_file" "$short_names"

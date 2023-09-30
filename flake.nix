@@ -18,6 +18,13 @@
             jq = lib.getExe jq;
           };
 
+        gitMobScript = with pkgs;
+          substituteAll {
+            src = ./src/git-mob;
+            isExecutable = true;
+            dialog = lib.getExe dialog;
+          };
+
         gitMobPrintScript = with pkgs;
           substituteAll {
             src = ./src/git-mob-print;
@@ -25,14 +32,23 @@
             jq = lib.getExe jq;
           };
 
+        generateDialogArgsScript = with pkgs;
+          substituteAll {
+            src = ./src/generate-dialog-args;
+            isExecutable = true;
+            jq = lib.getExe jq;
+            dialog = lib.getExe dialog;
+          };
+
         gitMob = pkgs.stdenv.mkDerivation {
           name = "git-mob";
           src = ./.;
           installPhase = ''
-            install -Dm755 ${./src/git-mob} $out/bin/git-mob
+            install -Dm755 ${gitMobScript} $out/bin/git-mob
             install -Dm755 ${./src/git-solo} $out/bin/git-solo
             install -Dm755 ${writeScript} $out/bin/write
             install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
+            install -Dm755 ${generateDialogArgsScript} $out/bin/generate-dialog-args
           '';
           doInstallCheck = true;
           installCheckPhase = ''
@@ -41,7 +57,9 @@
             export GIT_MOB_TEMPLATE=gitmessage.txt
             export GIT_MOB_LIST=git-mob-list
             patchShebangs test/git-mob-tests
+            patchShebangs test/generate-dialog-args-tests
             test/git-mob-tests
+            test/generate-dialog-args-tests
           '';
         };
       in

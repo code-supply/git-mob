@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eu
+
+generated="$(@jq@ \
+  --raw-output \
+  --join-output \
+  "$(cat <<'EOF'
+  .coauthors
+| to_entries
+| map(" \(.key) '\(.value.name)' off")[]
+EOF
+)" < "$GIT_MOB_COAUTHORS"
+)"
+echo "0 0 10$generated"
