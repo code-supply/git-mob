@@ -20,7 +20,6 @@
         gitMob = pkgs.stdenv.mkDerivation {
           name = "git-mob";
           src = ./.;
-          buildInputs = [ write ];
           installPhase = ''
             install -Dm755 ${generateDialogArgs}/bin/* $out/bin/git-mob-generate-dialog-args
             install -Dm755 ${mob}/bin/* $out/bin/git-mob
