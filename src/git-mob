@@ -24,7 +24,7 @@ then
 --default-item 1 \
 --checklist \
 'Mob up with:' \
-$($dir/generate-dialog-args)
+$($dir/git-mob-generate-dialog-args)
 EOF
 )"
   short_names="$(eval "$cmd")"
@@ -32,4 +32,4 @@ else
   short_names="$@"
 fi
 
-"$dir/write" "$coauthors_file" "$template_file" "$mob_list_file" "$short_names"
+"$dir/git-mob-write" "$coauthors_file" "$template_file" "$mob_list_file" "$short_names"

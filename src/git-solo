@@ -7,4 +7,4 @@ coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
 mob_list_file=${GIT_MOB_LIST=~/.git-mob}
 
-"$dir/write" "$coauthors_file" "$template_file" "$mob_list_file"
+"$dir/git-mob-write" "$coauthors_file" "$template_file" "$mob_list_file"

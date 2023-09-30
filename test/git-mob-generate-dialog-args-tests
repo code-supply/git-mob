@@ -34,14 +34,14 @@ echo ',"fb":{"name":"Fred Brookes","email":"fred@example.com"}' \
 echo '}}' \
   >> "$GIT_MOB_COAUTHORS"
 
-actual_output="$(generate-dialog-args)"
+actual_output="$(git-mob-generate-dialog-args)"
 
 assert_equal "0 0 10 ab 'Andrew Bruce' off fb 'Fred Brookes' off" \
   "$actual_output" \
   With empty mob, dialog command is generated with nothing selected.
 
 git-mob ab > /dev/null
-actual_output="$(generate-dialog-args)"
+actual_output="$(git-mob-generate-dialog-args)"
 
 assert_equal "0 0 10 ab 'Andrew Bruce' on fb 'Fred Brookes' off" \
   "$actual_output" \

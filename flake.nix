@@ -13,7 +13,7 @@
 
         writeScript = with pkgs;
           substituteAll {
-            src = ./src/write;
+            src = ./src/git-mob-write;
             isExecutable = true;
             jq = lib.getExe jq;
           };
@@ -34,7 +34,7 @@
 
         generateDialogArgsScript = with pkgs;
           substituteAll {
-            src = ./src/generate-dialog-args;
+            src = ./src/git-mob-generate-dialog-args;
             isExecutable = true;
             jq = lib.getExe jq;
             dialog = lib.getExe dialog;
@@ -46,9 +46,9 @@
           installPhase = ''
             install -Dm755 ${gitMobScript} $out/bin/git-mob
             install -Dm755 ${./src/git-solo} $out/bin/git-solo
-            install -Dm755 ${writeScript} $out/bin/write
+            install -Dm755 ${writeScript} $out/bin/git-mob-write
             install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
-            install -Dm755 ${generateDialogArgsScript} $out/bin/generate-dialog-args
+            install -Dm755 ${generateDialogArgsScript} $out/bin/git-mob-generate-dialog-args
           '';
           doInstallCheck = true;
           installCheckPhase = ''
@@ -57,9 +57,9 @@
             export GIT_MOB_TEMPLATE=gitmessage.txt
             export GIT_MOB_LIST=git-mob-list
             patchShebangs test/git-mob-tests
-            patchShebangs test/generate-dialog-args-tests
+            patchShebangs test/git-mob-generate-dialog-args-tests
             test/git-mob-tests
-            test/generate-dialog-args-tests
+            test/git-mob-generate-dialog-args-tests
           '';
         };
       in
