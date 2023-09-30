@@ -2,13 +2,16 @@
 
 set -eu
 
+mob_list="$(cat $GIT_MOB_LIST)"
+
 generated="$(@jq@ \
   --raw-output \
   --join-output \
+  --argjson mob "$mob_list" \
   "$(cat <<'EOF'
   .coauthors
 | to_entries
-| map(" \(.key) '\(.value.name)' off")[]
+| map(" \(.key) '\(.value.name)' \(if [.key] | inside($mob) then "on" else "off" end)")[]
 EOF
 )" < "$GIT_MOB_COAUTHORS"
 )"

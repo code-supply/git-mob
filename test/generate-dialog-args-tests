@@ -38,4 +38,11 @@ actual_output="$(generate-dialog-args)"
 
 assert_equal "0 0 10 ab 'Andrew Bruce' off fb 'Fred Brookes' off" \
   "$actual_output" \
-  Dialog command is generated
+  With empty mob, dialog command is generated with nothing selected.
+
+git-mob ab > /dev/null
+actual_output="$(generate-dialog-args)"
+
+assert_equal "0 0 10 ab 'Andrew Bruce' on fb 'Fred Brookes' off" \
+  "$actual_output" \
+  With nonempty mob, dialog command is generated with selected mobsters.
