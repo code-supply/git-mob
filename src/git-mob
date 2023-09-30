@@ -15,8 +15,6 @@ fi
 
 if [[ "$1" == "pick" ]]
 then
-  export GIT_MOB_COAUTHORS
-  export GIT_MOB_LIST
   cmd="$(cat <<EOF
 @dialog@ \
 --stdout \
@@ -24,7 +22,7 @@ then
 --default-item 1 \
 --checklist \
 'Mob up with:' \
-$($dir/git-mob-generate-dialog-args)
+$($dir/git-mob-generate-dialog-args "$coauthors_file" "$mob_list_file")
 EOF
 )"
   short_names="$(eval "$cmd")"
