@@ -11,44 +11,22 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        writeScript = with pkgs;
-          substituteAll {
-            src = ./src/git-mob-write;
-            isExecutable = true;
-            jq = lib.getExe jq;
-          };
-
-        gitMobScript = with pkgs;
-          substituteAll {
-            src = ./src/git-mob;
-            isExecutable = true;
-            dialog = "${dialog}/bin/dialog";
-          };
-
-        gitMobPrintScript = with pkgs;
-          substituteAll {
-            src = ./src/git-mob-print;
-            isExecutable = true;
-            jq = lib.getExe jq;
-          };
-
-        generateDialogArgsScript = with pkgs;
-          substituteAll {
-            src = ./src/git-mob-generate-dialog-args;
-            isExecutable = true;
-            jq = lib.getExe jq;
-            dialog = lib.getExe dialog;
-          };
+        generateDialogArgs = pkgs.callPackage ./src/git-mob-generate-dialog-args.nix { };
+        mob = pkgs.callPackage ./src/git-mob.nix { };
+        print = pkgs.callPackage ./src/git-mob-print.nix { };
+        solo = pkgs.callPackage ./src/git-solo.nix { };
+        write = pkgs.callPackage ./src/git-mob-write.nix { };
 
         gitMob = pkgs.stdenv.mkDerivation {
           name = "git-mob";
           src = ./.;
+          buildInputs = [ write ];
           installPhase = ''
-            install -Dm755 ${gitMobScript} $out/bin/git-mob
-            install -Dm755 ${./src/git-solo} $out/bin/git-solo
-            install -Dm755 ${writeScript} $out/bin/git-mob-write
-            install -Dm755 ${gitMobPrintScript} $out/bin/git-mob-print
-            install -Dm755 ${generateDialogArgsScript} $out/bin/git-mob-generate-dialog-args
+            install -Dm755 ${generateDialogArgs}/bin/* $out/bin/git-mob-generate-dialog-args
+            install -Dm755 ${mob}/bin/* $out/bin/git-mob
+            install -Dm755 ${print}/bin/* $out/bin/git-mob-print
+            install -Dm755 ${solo}/bin/* $out/bin/git-solo
+            install -Dm755 ${write}/bin/* $out/bin/git-mob-write
           '';
           doInstallCheck = true;
           installCheckPhase = ''
@@ -71,7 +49,6 @@
           packages = [
             gitMob
             pkgs.nixpkgs-fmt
-            pkgs.shellcheck
           ];
         };
       });

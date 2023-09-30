@@ -1,14 +1,9 @@
-#!/usr/bin/env bash
-
-set -eu
-
-dir="$(dirname "$0")"
 coauthors_file=$1
 mob_list_file=$2
 
 mob_list="$(cat "$mob_list_file")"
 
-generated="$(@jq@ \
+generated="$(jq \
   --raw-output \
   --join-output \
   --argjson mob "$mob_list" \

@@ -1,14 +1,9 @@
-#!/usr/bin/env bash
-
-set -e
-
-dir="$(dirname "$0")"
 coauthors_file=$1
 template_file=$2
 mob_list_file=$3
 
 # shellcheck disable=SC2016
-@jq@ \
+jq \
   -c \
   --null-input \
   --raw-output \
@@ -18,7 +13,7 @@ mob_list_file=$3
   "${@:4}" \
   > "$mob_list_file"
 
-printed="$("$dir/git-mob-print" "$coauthors_file" "$mob_list_file")"
+printed="$(git-mob-print "$coauthors_file" "$mob_list_file")"
 
 if [[ -z "$printed" ]]
 then

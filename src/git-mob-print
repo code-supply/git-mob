@@ -11,7 +11,7 @@ mob_list_file=$2
 [[ -z "$mob_list" ]] \
   && mob_list=[]
 
-@jq@ \
+jq \
   --raw-output \
   --argjson mob "$mob_list" \
   "$(cat <<'EOF'

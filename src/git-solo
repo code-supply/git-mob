@@ -1,10 +1,5 @@
-#!/usr/bin/env bash
-
-set -e
-
-dir="$(dirname "$0")"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
-template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
 mob_list_file=${GIT_MOB_LIST=~/.git-mob}
+template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
 
-"$dir/git-mob-write" "$coauthors_file" "$template_file" "$mob_list_file"
+git-mob-write "$coauthors_file" "$template_file" "$mob_list_file"
