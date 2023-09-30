@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+# cmd="dialog --erase-on-exit --default-item 1 --checklist 'Mob up with:' 0 0 10"
+
+# ab "Andrew Bruce" off   tj "Tim" off   jv "Jose Valim" off 2> hi
+
+jq \
+  --raw-output \
+  "$(cat <<'EOF'
+  .coauthors
+| to_entries
+EOF
+)" \
+  < "$coauthors_file"
