@@ -22,7 +22,7 @@
           substituteAll {
             src = ./src/git-mob;
             isExecutable = true;
-            dialog = lib.getExe dialog;
+            dialog = "${dialog}/bin/dialog";
           };
 
         gitMobPrintScript = with pkgs;
