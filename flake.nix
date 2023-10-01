@@ -24,6 +24,7 @@
       {
         formatter = pkgs.nixpkgs-fmt;
         apps.default = flake-utils.lib.mkApp { drv = gitMob; };
+        checks.default = callPackage ./check.nix { inherit gitMob; };
         packages.default = gitMob;
         devShells.default = pkgs.mkShell {
           packages = [
