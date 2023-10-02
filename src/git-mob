@@ -11,7 +11,7 @@ fi
 
 case "$cmd" in
   initials)
-    git-mob-initials "$coauthors_file" "$mob_list_file" --initials
+    git-mob-initials "$coauthors_file" "$mob_list_file"
     short_names=
     exit 0
     ;;
