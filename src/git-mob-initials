@@ -1,0 +1,22 @@
+coauthors_file=$1
+mob_list_file=$2
+
+[[ -e "$mob_list_file" ]] \
+  && mob_list="$(cat "$mob_list_file")"
+
+[[ -z "$mob_list" ]] \
+  && mob_list=[]
+
+jq \
+  --raw-output \
+  --argjson mob "$mob_list" \
+  "$(cat <<'EOF'
+  .coauthors
+| to_entries
+| map(select([.key] | inside($mob)))
+| from_entries
+| keys
+| join(" ")
+EOF
+)" \
+  < "$coauthors_file"

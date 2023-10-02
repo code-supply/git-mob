@@ -34,6 +34,8 @@ echo ',"fb":{"name":"Fred Brookes","email":"fred@example.com"}' \
 echo '}}' \
   >> "$GIT_MOB_COAUTHORS"
 
+git-solo
+
 actual_output="$(git-mob-generate-dialog-args "$GIT_MOB_COAUTHORS" "$GIT_MOB_LIST")"
 
 assert_equal "0 0 10 ab 'Andrew Bruce' off fb 'Fred Brookes' off" \

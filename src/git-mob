@@ -1,4 +1,3 @@
-dir="$(dirname "$0")"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 mob_list_file=${GIT_MOB_LIST=~/.git-mob}
 template_file=${GIT_MOB_TEMPLATE=~/.gitmessage.txt}
@@ -6,25 +5,31 @@ cmd="${1:-}"
 
 if [[ -z "$cmd" ]]
 then
-  "$dir/git-mob-print" "$coauthors_file" "$mob_list_file"
+  git-mob-print "$coauthors_file" "$mob_list_file"
   exit 0
 fi
 
-if [[ "$cmd" == "pick" ]]
-then
-  cmd="$(cat <<EOF
+case "$cmd" in
+  initials)
+    git-mob-initials "$coauthors_file" "$mob_list_file" --initials
+    short_names=
+    ;;
+  pick)
+    cmd="$(cat <<EOF
 dialog \
 --stdout \
 --erase-on-exit \
 --default-item 1 \
 --checklist \
 'Mob up with:' \
-$("$dir/git-mob-generate-dialog-args" "$coauthors_file" "$mob_list_file")
+$(git-mob-generate-dialog-args "$coauthors_file" "$mob_list_file")
 EOF
 )"
-  short_names="$(eval "$cmd")"
-else
-  short_names=$*
-fi
+    short_names="$(eval "$cmd")"
+    ;;
+  *)
+    short_names=$*
+    ;;
+esac
 
 git-mob-write "$coauthors_file" "$template_file" "$mob_list_file" "$short_names"

@@ -1,7 +1,8 @@
 { writeShellApplication
+, write
 }:
 writeShellApplication {
   name = "git-solo";
-  runtimeInputs = [ ];
+  runtimeInputs = [ write ];
   text = builtins.readFile ./git-solo;
 }

@@ -59,6 +59,11 @@ assert_equal \
   "$(git-mob)" \
   Running git-mob without arguments shows the current mob
 
+assert_equal \
+  "ab fb" \
+  "$(git-mob initials)" \
+  Running git-mob initials shows the initials of the mob
+
 actual_output="$(git-solo)"
 
 assert_equal \

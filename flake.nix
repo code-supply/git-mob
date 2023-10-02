@@ -13,6 +13,7 @@
 
         callPackage = pkgs.lib.callPackageWith (pkgs // {
           generateDialogArgs = callPackage ./src/git-mob-generate-dialog-args.nix { };
+          initials = callPackage ./src/git-mob-initials.nix { };
           mob = callPackage ./src/git-mob.nix { };
           print = callPackage ./src/git-mob-print.nix { };
           solo = callPackage ./src/git-solo.nix { };

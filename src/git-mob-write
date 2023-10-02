@@ -4,9 +4,9 @@ mob_list_file=$3
 
 # shellcheck disable=SC2016
 jq \
-  -c \
   --null-input \
   --raw-output \
+  --compact-output \
   --args \
   '$ARGS.positional' \
   -- \
