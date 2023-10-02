@@ -13,6 +13,7 @@ case "$cmd" in
   initials)
     git-mob-initials "$coauthors_file" "$mob_list_file" --initials
     short_names=
+    exit 0
     ;;
   pick)
     cmd="$(cat <<EOF

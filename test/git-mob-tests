@@ -64,6 +64,11 @@ assert_equal \
   "$(git-mob initials)" \
   Running git-mob initials shows the initials of the mob
 
+assert_equal \
+  "$expected_output" \
+  "$(git-mob)" \
+  git-mob initials doesn\'t affect the mob
+
 actual_output="$(git-solo)"
 
 assert_equal \
