@@ -55,6 +55,11 @@ $expected_output" \
   Forming a mob writes the commit template
 
 assert_equal \
+  '["ab","fb"]' \
+  "$(cat "$GIT_MOB_LIST")" \
+  Forming a mob writes initials as database entries
+
+assert_equal \
   "$expected_output" \
   "$(git-mob)" \
   Running git-mob without arguments shows the current mob
