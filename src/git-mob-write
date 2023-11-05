@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 coauthors_file=$1
 template_file=$2
 mob_list_file=$3

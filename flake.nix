@@ -12,13 +12,10 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         callPackage = pkgs.lib.callPackageWith (pkgs // {
-          generateDialogArgs = callPackage ./src/git-mob-generate-dialog-args.nix { };
-          initials = callPackage ./src/git-mob-initials.nix { };
-          mob = callPackage ./src/git-mob.nix { };
-          print = callPackage ./src/git-mob-print.nix { };
-          solo = callPackage ./src/git-solo.nix { };
-          write = callPackage ./src/git-mob-write.nix { };
-          prepareCommitMsg = callPackage ./src/git-mob-prepare-commit-msg.nix { };
+          version =
+            if self ? rev
+            then self.rev
+            else "dirty";
         });
 
         gitMob = callPackage ./default.nix { };
@@ -26,7 +23,6 @@
       {
         formatter = pkgs.nixpkgs-fmt;
         apps.default = flake-utils.lib.mkApp { drv = gitMob; };
-        checks.default = callPackage ./check.nix { inherit gitMob; };
         packages.default = gitMob;
         devShells.default = pkgs.mkShell {
           packages = [

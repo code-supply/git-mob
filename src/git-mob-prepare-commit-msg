@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 src="$1"
 dst="$(mktemp)"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
