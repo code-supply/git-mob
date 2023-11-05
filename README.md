@@ -13,27 +13,29 @@ The regular git-mob implementations have the following problems for nix users:
 
 By default you set your team in `~/.git-coauthors`. The tool keeps state in `~/.git-mob`.
 
-The tool's main job is either:
-- To write to `~/.gitmessage.txt`, which won't work with `git commit -m`.
-- To provide a prepare-commit-msg hook, which will work with `git commit -m`.
+The tool's job is to:
+- Write to `~/.gitmessage.txt`, which on its own won't work with `git commit -m`.
+- Provide a prepare-commit-msg hook, which enables `git commit -m`.
 
 You can override file locations using environment variables:
 
-- GIT_MOB_COAUTHORS: the JSON file where you define your team
-- GIT_MOB_LIST: the state that this tool keeps
-- GIT_MOB_TEMPLATE: the commit template that is written
+- `GIT_MOB_COAUTHORS`: the JSON file where you define your team
+- `GIT_MOB_LIST`: the state that this tool keeps
+- `GIT_MOB_TEMPLATE`: the commit template that is written
 
 ## Installation / usage
 
 - Enable flakes in nix.
-- Either:
-    - Configure your git to use `~/.gitmessage.txt` as its commit.template. In Home
-      Manager, this is `programs.git.extraConfig.commit.template`.
-    - Configure your git to use git-mob-prepare-commit-msg as its prepare-commit-msg hook.
-      In Home Manager, this is:
-      ```
-      programs.git.hooks.prepare-commit-msg = "${git-mob}/bin/git-mob-prepare-commit-msg";
-      ```
+- Configure your git to use `~/.gitmessage.txt` as its `commit.template`. In Home
+  Manager, this is:
+  ```
+  programs.git.extraConfig.commit.template = "~/.gitmessage.txt";
+  ```
+- Configure your git to use `git-mob-prepare-commit-msg` as the `prepare-commit-msg` hook.
+  In Home Manager, this is:
+  ```
+  programs.git.hooks.prepare-commit-msg = "${git-mob}/bin/git-mob-prepare-commit-msg";
+  ```
 - Install the packages into your Home Manager
 - Run `git mob ab bc` or `git solo` to work alone
 - Run `git mob pick` to choose from a terminal dialog!
