@@ -12,9 +12,12 @@ The regular git-mob implementations have the following problems for nix users:
 - There's no nix derivation written for those implementations AFAIK.
 
 By default you set your team in `~/.git-coauthors`. The tool keeps state in `~/.git-mob`.
-The tool's main job is to write to `~/.gitmessage.txt`.
 
-You can override these files using environment variables:
+The tool's main job is either:
+- To write to `~/.gitmessage.txt`, which won't work with `git commit -m`.
+- To provide a prepare-commit-msg hook, which will work with `git commit -m`.
+
+You can override file locations using environment variables:
 
 - GIT_MOB_COAUTHORS: the JSON file where you define your team
 - GIT_MOB_LIST: the state that this tool keeps
@@ -23,8 +26,14 @@ You can override these files using environment variables:
 ## Installation / usage
 
 - Enable flakes in nix.
-- Configure your git to use `~/.gitmessage.txt` as its commit.template. In Home
-  Manager, this is `programs.git.extraConfig.commit.template`.
+- Either:
+    - Configure your git to use `~/.gitmessage.txt` as its commit.template. In Home
+      Manager, this is `programs.git.extraConfig.commit.template`.
+    - Configure your git to use git-mob-prepare-commit-msg as its prepare-commit-msg hook.
+      In Home Manager, this is:
+      ```
+      programs.git.hooks.prepare-commit-msg = "${git-mob}/bin/git-mob-prepare-commit-msg";
+      ```
 - Install the packages into your Home Manager
 - Run `git mob ab bc` or `git solo` to work alone
 - Run `git mob pick` to choose from a terminal dialog!
