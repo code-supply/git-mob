@@ -1,6 +1,7 @@
 { symlinkJoin
 , generateDialogArgs
 , mob
+, prepareCommitMsg
 , print
 , solo
 , write
@@ -10,6 +11,7 @@ symlinkJoin {
   paths = [
     generateDialogArgs
     mob
+    prepareCommitMsg
     print
     solo
     write

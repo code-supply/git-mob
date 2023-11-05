@@ -1,0 +1,30 @@
+src="$1"
+dst="$(mktemp)"
+coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
+mob_list_file=${GIT_MOB_LIST=~/.git-mob}
+
+[[ -n "$(git interpret-trailers --parse "$src")" ]] && exit 0
+[[ "$(tr -d '\n' < "$src")" == "#"* ]] && echo >> "$dst"
+
+mob_message="$(git-mob-print "$coauthors_file" "$mob_list_file")"
+
+reached_comment=false;
+while read -r line
+do
+  if [[ "$line" == "#"* && "$reached_comment" == false ]]
+  then
+    echo "$mob_message" >> "$dst"
+    echo >> "$dst"
+    reached_comment=true;
+  fi
+  echo "$line" >> "$dst"
+done < "$src"
+
+if [[ "$reached_comment" == false ]]
+then
+  echo >> "$dst"
+  echo "$mob_message" >> "$dst"
+fi
+
+cp "$dst" "$src"
+rm "$dst"

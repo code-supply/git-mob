@@ -18,6 +18,7 @@
           print = callPackage ./src/git-mob-print.nix { };
           solo = callPackage ./src/git-solo.nix { };
           write = callPackage ./src/git-mob-write.nix { };
+          prepareCommitMsg = callPackage ./src/git-mob-prepare-commit-msg.nix { };
         });
 
         gitMob = callPackage ./default.nix { };

@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+set -e
+
+assert_equal () {
+  local red='\033[0;31m'
+  local green='\033[0;32m'
+  local no_color='\033[0m'
+  local expected=$1
+  local actual=$2
+  local message=${@:3}
+
+  if [[ "$expected" = "$actual" ]]
+  then
+    printf "$green✓$no_color $message\n"
+  else
+    printf "$red✗$no_color $message\n"
+    printf "$red\n"
+    echo "∵ actual:"
+    echo "$actual"
+    echo "not equal to:"
+    echo "$expected"
+    printf "$no_color"
+    exit 1
+  fi
+}
+
+echo '{"coauthors":' \
+  > "$GIT_MOB_COAUTHORS"
+echo '{"ab":{"name":"Andrew Bruce","email":"me@andrewbruce.net"}' \
+  >> "$GIT_MOB_COAUTHORS"
+echo ',"fb":{"name":"Fred Brookes","email":"fred@example.com"}' \
+  >> "$GIT_MOB_COAUTHORS"
+echo '}}' \
+  >> "$GIT_MOB_COAUTHORS"
+
+git-mob ab fb > /dev/null
+
+message_path="$(mktemp)"
+
+existing_message="Hello, World!"
+echo "$existing_message" > "$message_path"
+
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+actual_output="$(cat "$message_path")"
+
+assert_equal \
+  "Hello, World!
+
+Co-authored-by: Andrew Bruce <me@andrewbruce.net>
+Co-authored-by: Fred Brookes <fred@example.com>" \
+  "$actual_output" \
+  prepare-commit-msg hook adds coauthors to a message without comments
+
+existing_message="Hello, World!
+
+# some comments
+# go here
+"
+echo "$existing_message" > "$message_path"
+
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+actual_output="$(cat "$message_path")"
+
+assert_equal \
+  "Hello, World!
+
+Co-authored-by: Andrew Bruce <me@andrewbruce.net>
+Co-authored-by: Fred Brookes <fred@example.com>
+
+# some comments
+# go here" \
+  "$actual_output" \
+  prepare-commit-msg hook adds coauthors to an existing message
+
+existing_message="# some comments
+# go here
+"
+echo "$existing_message" > "$message_path"
+
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+actual_output="$(cat "$message_path")"
+
+assert_equal \
+  "
+Co-authored-by: Andrew Bruce <me@andrewbruce.net>
+Co-authored-by: Fred Brookes <fred@example.com>
+
+# some comments
+# go here" \
+  "$actual_output" \
+  prepare-commit-msg hook adds coauthors to a blank message with a leading newline
+
+existing_message="I'm a commit that's bound to be amended
+
+Co-authored-by: Original Author <og@authors.biz>
+
+# some comments
+# go here"
+echo "$existing_message" > "$message_path"
+
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+actual_output="$(cat "$message_path")"
+
+assert_equal \
+  "$existing_message" \
+  "$actual_output" \
+  prepare-commit-msg hook preserves existing coauthors
