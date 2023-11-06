@@ -35,8 +35,10 @@ echo '}}' \
   >> "$GIT_MOB_COAUTHORS"
 
 git-mob ab fb > /dev/null
+git init --quiet
 
 message_path="$(mktemp)"
+
 
 existing_message="Hello, World!"
 echo "$existing_message" > "$message_path"
@@ -51,6 +53,7 @@ Co-authored-by: Andrew Bruce <me@andrewbruce.net>
 Co-authored-by: Fred Brookes <fred@example.com>" \
   "$actual_output" \
   prepare-commit-msg hook adds coauthors to a message without comments
+
 
 existing_message="Hello, World!
 
@@ -73,6 +76,7 @@ Co-authored-by: Fred Brookes <fred@example.com>
   "$actual_output" \
   prepare-commit-msg hook adds coauthors to an existing message
 
+
 existing_message="# some comments
 # go here
 "
@@ -91,6 +95,7 @@ Co-authored-by: Fred Brookes <fred@example.com>
   "$actual_output" \
   prepare-commit-msg hook adds coauthors to a blank message with a leading newline
 
+
 existing_message="I'm a commit that's bound to be amended
 
 Co-authored-by: Original Author <og@authors.biz>
@@ -106,3 +111,25 @@ assert_equal \
   "$existing_message" \
   "$actual_output" \
   prepare-commit-msg hook preserves existing coauthors
+
+
+existing_message="I'm a commit without trailers"
+echo "$existing_message" > "$message_path"
+
+(
+export GIT_AUTHOR_EMAIL=jim@bob.com
+export GIT_AUTHOR_NAME=James
+export GIT_COMMITTER_EMAIL=jim@bob.com
+export GIT_COMMITTER_NAME=James
+git commit --quiet --allow-empty -m first
+git commit --quiet --allow-empty -m second
+git checkout --quiet HEAD^
+)
+
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+actual_output="$(cat "$message_path")"
+
+assert_equal \
+  "$existing_message" \
+  "$actual_output" \
+  prepare-commit-msg hook does not change commits during a rebase

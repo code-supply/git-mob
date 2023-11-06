@@ -9,7 +9,11 @@ dst="$(mktemp)"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 mob_list_file=${GIT_MOB_LIST=~/.git-mob}
 
-[[ -n "$(git interpret-trailers --parse "$src")" ]] && exit 0
+if [[ -z "$(git branch --show-current)" || -n "$(git interpret-trailers --parse "$src")" ]]
+then
+  rm "$dst"
+  exit 0
+fi
 [[ "$(tr -d '\n' < "$src")" == "#"* ]] && echo >> "$dst"
 
 mob_message="$(git-mob-print "$coauthors_file" "$mob_list_file")"
