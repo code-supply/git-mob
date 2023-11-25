@@ -34,11 +34,30 @@ echo ',"fb":{"name":"Fred Brookes","email":"fred@example.com"}' \
 echo '}}' \
   >> "$GIT_MOB_COAUTHORS"
 
-git-mob ab fb > /dev/null
 git init --quiet
 
 message_path="$(mktemp)"
 
+git-solo
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+actual_output="$(stat --printf="%s" "$message_path")"
+
+assert_equal \
+  0 \
+  "$actual_output" \
+  prepare-commit-msg without coauthors produces an empty message
+
+
+echo "# 345678" > "$message_path"
+git-mob-prepare-commit-msg "$message_path" "type of commit" "SOMESHA1"
+
+assert_equal \
+  "# 345678" \
+  "$(cat "$message_path")" \
+  prepare-commit-msg without coauthors has no leading whitespace
+
+
+git-mob ab fb > /dev/null
 
 existing_message="Hello, World!"
 echo "$existing_message" > "$message_path"
@@ -93,7 +112,7 @@ Co-authored-by: Fred Brookes <fred@example.com>
 # some comments
 # go here" \
   "$actual_output" \
-  prepare-commit-msg hook adds coauthors to a blank message with a leading newline
+  prepare-commit-msg hook adds newline + coauthors to a comment-only message
 
 
 existing_message="I'm a commit that's bound to be amended

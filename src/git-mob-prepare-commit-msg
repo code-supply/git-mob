@@ -5,18 +5,23 @@ set -o nounset
 set -o pipefail
 
 src="$1"
-dst="$(mktemp)"
 coauthors_file=${GIT_MOB_COAUTHORS=~/.git-coauthors}
 mob_list_file=${GIT_MOB_LIST=~/.git-mob}
+mob_message="$(git-mob-print "$coauthors_file" "$mob_list_file")"
 
-if [[ -z "$(git branch --show-current)" || -n "$(git interpret-trailers --parse "$src")" ]]
+if
+  [[ "$(stat --printf "%s" "$src")" == 0
+  || -z "$mob_message"
+  || -z "$(git branch --show-current)"
+  || -n "$(git interpret-trailers --parse "$src")"
+  ]]
 then
-  rm "$dst"
   exit 0
 fi
-[[ "$(tr -d '\n' < "$src")" == "#"* ]] && echo >> "$dst"
 
-mob_message="$(git-mob-print "$coauthors_file" "$mob_list_file")"
+dst="$(mktemp)"
+
+[[ "$(tr -d '\n' < "$src")" == "#"* ]] && echo >> "$dst"
 
 reached_comment=false;
 while read -r line
