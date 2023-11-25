@@ -18,27 +18,34 @@ then
   exit 0
 fi
 
-dst="$(mktemp)"
+is_only_comments() {
+  [[ "$(tr -d '\n')" == "#"* ]]
+}
 
-[[ "$(tr -d '\n' < "$src")" == "#"* ]] && echo >> "$dst"
+put_message_above_comments() {
+  local reached_comment=false;
 
-reached_comment=false;
-while read -r line
-do
-  if [[ "$line" == "#"* && "$reached_comment" == false ]]
+  while read -r line
+  do
+    if [[ "$line" == "#"* && "$reached_comment" == false ]]
+    then
+      echo "$mob_message"
+      echo
+      reached_comment=true;
+    fi
+    echo "$line"
+  done
+
+  if [[ "$reached_comment" == false ]]
   then
-    echo "$mob_message" >> "$dst"
-    echo >> "$dst"
-    reached_comment=true;
+    echo
+    echo "$mob_message"
   fi
-  echo "$line" >> "$dst"
-done < "$src"
+}
 
-if [[ "$reached_comment" == false ]]
-then
-  echo >> "$dst"
-  echo "$mob_message" >> "$dst"
-fi
+new_contents="$(
+  is_only_comments < "$src" && echo
+  put_message_above_comments < "$src"
+)"
 
-cp "$dst" "$src"
-rm "$dst"
+echo "$new_contents" > "$src"
