@@ -10,8 +10,7 @@ mob_list_file=${GIT_MOB_LIST=~/.git-mob}
 mob_message="$(git-mob-print "$coauthors_file" "$mob_list_file")"
 
 if
-  [[ "$(stat --printf "%s" "$src")" == 0
-  || -z "$mob_message"
+  [[ -z "$mob_message"
   || -z "$(git branch --show-current)"
   || -n "$(git interpret-trailers --parse "$src")"
   ]]
