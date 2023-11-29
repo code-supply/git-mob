@@ -28,8 +28,11 @@ stdenvNoCC.mkDerivation {
   installCheckInputs = runtimeInputs ++ [ shellcheck ];
 
   postFixup = ''
-    wrapProgram \
-      $out/bin/git-mob \
-      --set PATH "${lib.makeBinPath runtimeInputs}:$out/bin:$PATH"
+    for file in $out/bin/*
+    do
+      wrapProgram \
+        $file \
+        --set PATH "${lib.makeBinPath runtimeInputs}:$out/bin:$PATH"
+    done
   '';
 }
