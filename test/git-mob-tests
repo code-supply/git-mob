@@ -90,3 +90,8 @@ assert_equal \
   0 \
   "$(du "$GIT_MOB_TEMPLATE" | cut -f1)" \
   Soloing makes commit template zero length
+
+assert_equal \
+  0 \
+  "$(export GIT_MOB_LIST="/filethatdoesntexist"; git-mob; echo $?)" \
+  Non-existent mob list is OK

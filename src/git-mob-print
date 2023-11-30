@@ -6,12 +6,10 @@ set -o pipefail
 
 coauthors_file=$1
 mob_list_file=$2
+mob_list=[]
 
 [[ -e "$mob_list_file" ]] \
   && mob_list="$(cat "$mob_list_file")"
-
-[[ -z "$mob_list" ]] \
-  && mob_list=[]
 
 jq \
   --raw-output \
