@@ -21,4 +21,4 @@ EOF
 )" < "$coauthors_file"
 )"
 
-echo "0 0 10$generated"
+echo "0 0 0$generated"
