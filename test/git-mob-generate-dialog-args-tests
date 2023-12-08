@@ -38,13 +38,13 @@ git-solo
 
 actual_output="$(git-mob-generate-dialog-args "$GIT_MOB_COAUTHORS" "$GIT_MOB_LIST")"
 
-assert_equal "0 0 10 ab 'Andrew Bruce' off fb 'Fred Brookes' off" \
+assert_equal "0 0 0 ab 'Andrew Bruce' off fb 'Fred Brookes' off" \
   "$actual_output" \
   With empty mob, dialog command is generated with nothing selected.
 
 git-mob ab > /dev/null
 actual_output="$(git-mob-generate-dialog-args "$GIT_MOB_COAUTHORS" "$GIT_MOB_LIST")"
 
-assert_equal "0 0 10 ab 'Andrew Bruce' on fb 'Fred Brookes' off" \
+assert_equal "0 0 0 ab 'Andrew Bruce' on fb 'Fred Brookes' off" \
   "$actual_output" \
   With nonempty mob, dialog command is generated with selected mobsters.
