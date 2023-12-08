@@ -46,6 +46,7 @@
         default = pkgs.mkShell {
           packages = [
             gitMob
+            pkgs.dialog
             pkgs.nixpkgs-fmt
           ];
         };
